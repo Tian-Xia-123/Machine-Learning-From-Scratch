@@ -11,7 +11,7 @@ ndarray *np_array(int ndim, int *shape) {
   // 1. Allocate the struct itself
   ndarray *arr = malloc(sizeof(*arr));
   if (arr == NULL) {
-    fprintf(stderr, "Error: memory allocation failed for struct\n");
+    perror("malloc failed");
     return NULL;
   }
 
@@ -130,7 +130,6 @@ ndarray *np_add(ndarray *a, ndarray *b) {
 
   ndarray *res = np_array(a->ndim, a->shape);
   if (res == NULL) {
-    fprintf(stderr, "Error: memory allocation failed for struct\n");
     return NULL;
   }
 
