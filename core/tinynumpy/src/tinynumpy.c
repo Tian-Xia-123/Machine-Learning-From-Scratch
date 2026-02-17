@@ -4,14 +4,14 @@
 
 ndarray *np_array(int ndim, int *shape) {
   if (ndim < 0 || shape == NULL) {
-    fprintf(stderr, "tinynumpy ERROR: Invalid ndim or NULL shape\n");
+    fprintf(stderr, "Error: invalid ndim or NULL shape\n");
     return NULL;
   }
 
   // 1. Allocate the struct itself
   ndarray *arr = malloc(sizeof(*arr));
   if (arr == NULL) {
-    fprintf(stderr, "tinynumpy ERROR: Memory allocation failed for struct\n");
+    fprintf(stderr, "Error: memory allocation failed for struct\n");
     return NULL;
   }
 
@@ -27,7 +27,7 @@ ndarray *np_array(int ndim, int *shape) {
 
   for (int i = 0; i < ndim; i++) {
     if (shape[i] <= 0) {
-      fprintf(stderr, "tinynumpy ERROR: Dimension size must be positive\n");
+      fprintf(stderr, "Error: dimension size must be positive\n");
       free(arr->shape);
       free(arr);
       return NULL;
@@ -75,14 +75,13 @@ void np_free(ndarray *arr) {
 
 double np_get(ndarray *arr, int *indices) {
   if (!arr || !indices) {
-    fprintf(stderr, "tinynumpy ERROR: NULL pointer in np_get\n");
+    fprintf(stderr, "Error: NULL pointer in np_get\n");
     return -1;
   }
   size_t offset = 0;
   for (int i = 0; i < arr->ndim; i++) {
     if (indices[i] < 0 || indices[i] >= arr->shape[i]) {
-      fprintf(stderr,
-              "tinynumpy IndexError: Axis %d index %d is out of bounds\n", i,
+      fprintf(stderr, "Error: axis %d index %d is out of bounds\n", i,
               indices[i]);
       return -2;
     }
@@ -94,14 +93,13 @@ double np_get(ndarray *arr, int *indices) {
 
 void np_set(ndarray *arr, int *indices, double value) {
   if (!arr || !indices) {
-    fprintf(stderr, "tinynumpy ERROR: NULL pointer in np_set\n");
+    fprintf(stderr, "Error: NULL pointer in np_set\n");
     return;
   }
   size_t offset = 0;
   for (int i = 0; i < arr->ndim; i++) {
     if (indices[i] < 0 || indices[i] >= arr->shape[i]) {
-      fprintf(stderr,
-              "tinynumpy IndexError: Axis %d index %d is out of bounds\n", i,
+      fprintf(stderr, "Error: axis %d index %d is out of bounds\n", i,
               indices[i]);
       return;
     }
@@ -113,26 +111,26 @@ void np_set(ndarray *arr, int *indices, double value) {
 
 ndarray *np_add(ndarray *a, ndarray *b) {
   if (!a || !b) {
-    fprintf(stderr, "tinynumpy ERROR: NULL pointer in np_add\n");
+    fprintf(stderr, "Error: NULL pointer in np_add\n");
     return NULL;
   }
 
   if (a->ndim != b->ndim) {
-    fprintf(stderr, "tinynumpy ERROR: Dimension count mismatch\n");
+    fprintf(stderr, "Error: dimension count mismatch\n");
     return NULL;
   }
 
   for (int i = 0; i < a->ndim; i++) {
     if (a->shape[i] != b->shape[i]) {
-      fprintf(stderr, "tinynumpy ERROR: Shape mismatch at axis %d (%d vs %d)\n",
-              i, a->shape[i], b->shape[i]);
+      fprintf(stderr, "Error: shape mismatch at axis %d (%d vs %d)\n", i,
+              a->shape[i], b->shape[i]);
       return NULL;
     }
   }
 
   ndarray *res = np_array(a->ndim, a->shape);
   if (res == NULL) {
-    fprintf(stderr, "tinynumpy ERROR: Memory allocation failed for struct\n");
+    fprintf(stderr, "Error: memory allocation failed for struct\n");
     return NULL;
   }
 
