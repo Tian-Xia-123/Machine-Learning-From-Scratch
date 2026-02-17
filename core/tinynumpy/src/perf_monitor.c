@@ -12,11 +12,13 @@ int setup_perf_event(int type, int config) {
                                .config = config,
                                .disabled = 1,
                                .exclude_kernel = 1,
-                               .exclude_hv = 1};
+                               .exclude_hv = 1,
+                               .read_format = PERF_FORMAT_TOTAL_TIME_ENABLED |
+                                              PERF_FORMAT_TOTAL_TIME_RUNNING};
 
   int fd = syscall(__NR_perf_event_open, &pe, 0, -1, -1, 0);
   if (fd < 0) {
-    perror("Error: perf_event_open failed.");
+    perror("perf_event_open failed");
     return -1;
   }
 
@@ -25,8 +27,7 @@ int setup_perf_event(int type, int config) {
 
 void start_perf_event(int fd) {
   if (fd < 0) {
-    fprintf(stderr, "Error: Cannot stop. Invalid file descriptor (fd=%d).\n",
-            fd);
+    fprintf(stderr, "Error: invalid file descriptor (fd=%d)\n", fd);
     return;
   }
   ioctl(fd, PERF_EVENT_IOC_RESET, 0);
@@ -35,24 +36,27 @@ void start_perf_event(int fd) {
 
 void stop_perf_event(int fd) {
   if (fd < 0) {
-    fprintf(stderr, "Error: Cannot stop. Invalid file descriptor (fd=%d).\n",
-            fd);
+    fprintf(stderr, "Error: invalid file descriptor (fd=%d)\n", fd);
     return;
   }
   ioctl(fd, PERF_EVENT_IOC_DISABLE, 0);
 }
 
-long long read_perf_event(int fd) {
+int read_perf_event(int fd, perf_result *res) {
   if (fd < 0) {
-    fprintf(stderr, "Error: Cannot read. Invalid file descriptor (fd=%d).\n",
-            fd);
+    fprintf(stderr, "Error: invalid file descriptor (fd=%d)\n", fd);
     return -1;
   }
 
-  long long count;
-  if (read(fd, &count, sizeof(long long)) != sizeof(long long)) {
-    perror("Error: Failed to read perf event value.");
+  ssize_t bytes = read(fd, res, sizeof(*res));
+
+  if (bytes != sizeof(*res)) {
+    if (bytes == -1)
+      perror("read");
+    else
+      fprintf(stderr, "Error: read %zd bytes\n", bytes);
     return -1;
   }
-  return count;
+
+  return 0;
 }
