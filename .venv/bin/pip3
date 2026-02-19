@@ -1,4 +1,6 @@
-#!/home/tian/ai/Machine-Learning-From-Scratch/.venv/bin/python3
+#!/bin/sh
+'''exec' "/home/tian/ai learning/ml-from-scratch/.venv/bin/python3" "$0" "$@"
+' '''
 # -*- coding: utf-8 -*-
 import re
 import sys

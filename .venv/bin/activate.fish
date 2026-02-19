@@ -33,7 +33,7 @@ end
 # Unset irrelevant variables.
 deactivate nondestructive
 
-set -gx VIRTUAL_ENV /home/tian/ai/Machine-Learning-From-Scratch/.venv
+set -gx VIRTUAL_ENV '/home/tian/ai learning/ml-from-scratch/.venv'
 
 set -gx _OLD_VIRTUAL_PATH $PATH
 set -gx PATH "$VIRTUAL_ENV/"bin $PATH
