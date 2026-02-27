@@ -1,4 +1,5 @@
 #include "tinynumpy.h"
+#include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -60,6 +61,46 @@ ndarray *np_array(int ndim, int *shape) {
   }
 
   return arr;
+}
+
+ndarray *np_zeros(int ndim, int *shape) { return np_array(ndim, shape); }
+
+ndarray *np_ones(int ndim, int *shape) {
+  ndarray *arr = np_array(ndim, shape);
+  if (arr == NULL)
+    return NULL;
+
+  for (int i = 0; i < arr->size; i++) {
+    arr->data[i] = 1.0;
+  }
+  return arr;
+}
+
+ndarray *np_arange(double start, double stop, double step) {
+  if (step > 0 && start >= stop) {
+    fprintf(stderr, "Error: start must be less than stop for positive "
+                    "step.\n");
+    return NULL;
+  } else if (step < 0 && start <= stop) {
+    fprintf(stderr, "Error: start must be greater than stop for negative "
+                    "step.\n");
+    return NULL;
+  } else if (step == 0) {
+    fprintf(stderr, "Error: step cannot be zero");
+    return NULL;
+  }
+
+  double epsilon = 1e-10;
+
+  int size = (int)floor((stop - start - epsilon) / step) + 1;
+  int shape[1] = {size};
+  ndarray *res = np_array(1, shape);
+  res->data[0] = start;
+  for (int i = 1; i < size; i++) {
+    res->data[i] = res->data[i - 1] + step;
+  }
+
+  return res;
 }
 
 void np_free(ndarray *arr) {
