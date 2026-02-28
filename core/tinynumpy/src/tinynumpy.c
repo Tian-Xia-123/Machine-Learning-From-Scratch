@@ -97,7 +97,7 @@ ndarray *np_arange(double start, double stop, double step) {
   ndarray *res = np_array(1, shape);
   res->data[0] = start;
   for (int i = 1; i < size; i++) {
-    res->data[i] = res->data[i - 1] + step;
+    res->data[i] = start + i * step;
   }
 
   return res;
