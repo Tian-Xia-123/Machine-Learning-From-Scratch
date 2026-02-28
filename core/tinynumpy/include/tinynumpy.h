@@ -67,4 +67,10 @@ void np_set(ndarray *arr, int *indices, double value);
  */
 ndarray *np_add(ndarray *a, ndarray *b);
 
+/**
+ * Performs element-wise subtraction of two arrays.
+ * Note: Assumes both arrays have the same shape.
+ */
+ndarray *np_subtract(ndarray *a, ndarray *b);
+
 #endif

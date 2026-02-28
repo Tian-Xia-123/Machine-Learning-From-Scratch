@@ -179,3 +179,33 @@ ndarray *np_add(ndarray *a, ndarray *b) {
   }
   return res;
 }
+
+ndarray *np_subtract(ndarray *a, ndarray *b) {
+  if (!a || !b) {
+    fprintf(stderr, "Error: NULL pointer in np_add\n");
+    return NULL;
+  }
+
+  if (a->ndim != b->ndim) {
+    fprintf(stderr, "Error: dimension count mismatch\n");
+    return NULL;
+  }
+
+  for (int i = 0; i < a->ndim; i++) {
+    if (a->shape[i] != b->shape[i]) {
+      fprintf(stderr, "Error: shape mismatch at axis %d (%d vs %d)\n", i,
+              a->shape[i], b->shape[i]);
+      return NULL;
+    }
+  }
+
+  ndarray *res = np_array(a->ndim, a->shape);
+  if (res == NULL) {
+    return NULL;
+  }
+
+  for (int i = 0; i < a->size; i++) {
+    res->data[i] = a->data[i] - b->data[i];
+  }
+  return res;
+}
