@@ -62,14 +62,14 @@ void np_set(ndarray *arr, int *indices, double value);
 // Basic Operations
 
 /**
- * Performs element-wise addition of two arrays.
- * Note: Assumes both arrays have the same shape.
+ * Performs element-wise addition of two ndarrays.
+ * Note: Assumes both ndarrays have the same shape.
  */
 ndarray *np_add(ndarray *a, ndarray *b);
 
 /**
- * Performs element-wise subtraction of two arrays.
- * Note: Assumes both arrays have the same shape.
+ * Performs element-wise subtraction of two ndarrays.
+ * Note: Assumes both ndarrays have the same shape.
  */
 ndarray *np_subtract(ndarray *a, ndarray *b);
 
