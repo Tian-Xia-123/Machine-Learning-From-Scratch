@@ -217,10 +217,10 @@ static void _matmul_2d_core(const double *A, const double *B, double *C, int M,
   }
 
   for (int m = 0; m < M; m++) {
-    for (int n = 0; n < N; n++) {
-      int index = m * N + n;
-      for (int k = 0; k < K; k++) {
-        C[index] += A[m * K + k] * B[k * N + n];
+    for (int k = 0; k < K; k++) {
+      int temp = m * K + k;
+      for (int n = 0; n < N; n++) {
+        C[m * N + n] += A[temp] * B[k * N + n];
       }
     }
   }
