@@ -209,3 +209,51 @@ ndarray *np_subtract(ndarray *a, ndarray *b) {
   }
   return res;
 }
+
+static void _matmul_2d_core(const double *A, const double *B, double *C, int M,
+                            int K, int N) {
+  for (int i = 0; i < M * N; i++) {
+    C[i] = 0.0;
+  }
+
+  for (int m = 0; m < M; m++) {
+    for (int n = 0; n < N; n++) {
+      int index = m * N + n;
+      for (int k = 0; k < K; k++) {
+        C[index] += A[m * K + k] * B[k * N + n];
+      }
+    }
+  }
+}
+
+ndarray *np_matmul(ndarray *a, ndarray *b) {
+  if (!a || !b) {
+    fprintf(stderr, "Error: NULL pointer in np_add\n");
+    return NULL;
+  }
+
+  if (a->ndim != b->ndim) {
+    fprintf(stderr, "Error: dimension count mismatch\n");
+    return NULL;
+  }
+
+  if (a->shape[1] != b->shape[0]) {
+    fprintf(stderr, "Error: the last dimension of a must match the first "
+                    "dimension of b.\n");
+    return NULL;
+  }
+
+  int M = a->shape[0];
+  int K = a->shape[1];
+  int N = b->shape[1];
+
+  int shape[2] = {M, N};
+  ndarray *res = np_array(2, shape);
+  if (res == NULL) {
+    return NULL;
+  }
+
+  _matmul_2d_core(a->data, b->data, res->data, M, K, N);
+
+  return res;
+}

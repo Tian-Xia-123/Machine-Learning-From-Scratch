@@ -73,4 +73,11 @@ ndarray *np_add(ndarray *a, ndarray *b);
  */
 ndarray *np_subtract(ndarray *a, ndarray *b);
 
+/**
+ * Performs matrix mulplication of two ndarrays.
+ * Note: Assumes the last dimension of a match the first dimension of b.
+ * Currently supports 2D arrays only.
+ */
+ndarray *np_matmul(ndarray *a, ndarray *b);
+
 #endif
